@@ -18339,15 +18339,17 @@ var DialogflowProvider = function (_Provider) {
       var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(event) {
         var _this3 = this;
 
-        var user_state_id, current_location, context, request, detection, queryResult, intent, entities;
+        var user_state, current_location, context, request, detection, queryResult, intent, entities;
         return regeneratorRuntime.wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
-                user_state_id = event.bp.dialogEngine.stateManager.getState(event.user.id)._stateId;
 
-                console.log('State ID: ', user_state_id);
-                current_location = event.bp.dialogEngine.getCurrentPosition(user_state_id);
+                console.log('User ID: ', event.user.id);
+                user_state = event.bp.dialogEngine.stateManager.getState(event.user.id);
+
+                console.log('State ID: ', user_state);
+                current_location = event.bp.dialogEngine.getCurrentPosition(user_state._stateId);
 
                 console.log('Location: ', current_location);
 
@@ -18375,10 +18377,10 @@ var DialogflowProvider = function (_Provider) {
                     }
                   }
                 };
-                _context4.next = 9;
+                _context4.next = 10;
                 return this.sessionClient.detectIntent(request);
 
-              case 9:
+              case 10:
                 detection = _context4.sent;
                 queryResult = detection[0].queryResult;
                 intent = {
@@ -18406,7 +18408,7 @@ var DialogflowProvider = function (_Provider) {
                   })
                 });
 
-              case 14:
+              case 15:
               case 'end':
                 return _context4.stop();
             }

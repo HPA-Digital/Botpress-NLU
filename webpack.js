@@ -45,7 +45,7 @@ var webConfig = {
     publicPath: '/js/modules/',
     filename: 'web.bundle.js',
     libraryTarget: 'assign',
-    library: ['botpress', pkg.name]
+    library: ['botpress', "@botpress/nlu"]
   },
   resolve: {
     extensions: ['.js', '.jsx']

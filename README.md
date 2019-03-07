@@ -1,11 +1,3 @@
-
-Fork of the official NLU module for Botpress:
-
-## Changes from official module
-
-- Expose flow and node as context to Dialogflow requests
-
----
 <img src='https://raw.githubusercontent.com/botpress/botpress/master/packages/functionals/botpress-nlu/assets/banner_demo.gif'>
 
 # Botpress NLU ⚡
@@ -119,14 +111,14 @@ There are some entities that LUIS doesn't support in some languages, make sure t
 <details>
   <summary><strong>I get an error when syncing my model</strong> <i>(click to see)</i></summary>
   Make sure that:
-
+  
   - You have enough labels (min 2) for the intent
   - The entities you are using are supported by your app's language
 </details>
 
 ## RASA
 
-Botpress NLU will create and train and maintain your projects and models automatically for you.
+Botpress NLU will create and train and maintain your projects and models automatically for you. 
 
 > **Note:** By default, Botpress creates separate projects for development and production environment, e.g. `dev__botpress__all` and `prod__botpress__all`.
 

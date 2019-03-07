@@ -18341,7 +18341,7 @@ var DialogflowProvider = function (_Provider) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
-                user_state_id = event.bp.stateManager.getState(event.user.id)._stateId;
+                user_state_id = event.bp.dialogEngine.stateManager.getState(event.user.id)._stateId;
 
                 console.log('State ID: ', user_state_id);
                 current_location = event.bp.dialogEngine.getCurrentPosition(user_state_id);

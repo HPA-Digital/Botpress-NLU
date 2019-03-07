@@ -18346,10 +18346,18 @@ var DialogflowProvider = function (_Provider) {
               case 0:
 
                 console.log('User ID: ', event.user.id);
-                user_state = event.bp.dialogEngine.stateManager.getState(event.user.id);
+                _context4.next = 3;
+                return event.bp.dialogEngine.stateManager.getState(event.user.id);
+
+              case 3:
+                user_state = _context4.sent;
 
                 console.log('State ID: ', user_state);
-                current_location = event.bp.dialogEngine.getCurrentPosition(user_state._stateId);
+                _context4.next = 7;
+                return event.bp.dialogEngine.getCurrentPosition(user_state._stateId);
+
+              case 7:
+                current_location = _context4.sent;
 
                 console.log('Location: ', current_location);
 
@@ -18377,10 +18385,10 @@ var DialogflowProvider = function (_Provider) {
                     }
                   }
                 };
-                _context4.next = 10;
+                _context4.next = 14;
                 return this.sessionClient.detectIntent(request);
 
-              case 10:
+              case 14:
                 detection = _context4.sent;
                 queryResult = detection[0].queryResult;
                 intent = {
@@ -18408,7 +18416,7 @@ var DialogflowProvider = function (_Provider) {
                   })
                 });
 
-              case 15:
+              case 19:
               case 'end':
                 return _context4.stop();
             }

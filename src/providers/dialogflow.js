@@ -61,9 +61,9 @@ export default class DialogflowProvider extends Provider {
   async extract(event) {
 
     console.log('User ID: ', event.user.id)
-    const user_state = event.bp.dialogEngine.stateManager.getState(event.user.id);
+    const user_state = await event.bp.dialogEngine.stateManager.getState(event.user.id);
     console.log('State ID: ', user_state);
-    const current_location = event.bp.dialogEngine.getCurrentPosition(user_state._stateId);
+    const current_location = await event.bp.dialogEngine.getCurrentPosition(user_state._stateId);
     console.log('Location: ', current_location);
 
     const context = [

@@ -16930,61 +16930,64 @@ module.exports = {
             while (1) {
               switch (_context.prev = _context.next) {
                 case 0:
+
+                  console.log('Processing Event: ', event.text);
+
                   if (!['session_reset', 'bp_dialog_timeout'].includes(event.type)) {
-                    _context.next = 2;
+                    _context.next = 3;
                     break;
                   }
 
                   return _context.abrupt('return');
 
-                case 2:
+                case 3:
                   _context.t0 = JSON;
-                  _context.next = 5;
+                  _context.next = 6;
                   return bp.kvs.get('nlu/requestsLimit');
 
-                case 5:
+                case 6:
                   _context.t1 = _context.sent;
 
                   if (_context.t1) {
-                    _context.next = 8;
+                    _context.next = 9;
                     break;
                   }
 
                   _context.t1 = '{}';
 
-                case 8:
+                case 9:
                   _context.t2 = _context.t1;
                   previous = _context.t0.parse.call(_context.t0, _context.t2);
                   hour = (0, _moment2.default)().startOf('hour');
                   requestsCount = hour.isSame(previous.hour) ? previous.requestsCount : 0;
-                  _context.next = 14;
+                  _context.next = 15;
                   return bp.kvs.set('nlu/requestsLimit', JSON.stringify({ hour: hour, requestsCount: requestsCount + 1 }));
 
-                case 14:
+                case 15:
                   maximumRequestsPerHour = parseFloat(config.maximumRequestsPerHour);
 
                   if (!(requestsCount > maximumRequestsPerHour)) {
-                    _context.next = 17;
+                    _context.next = 18;
                     break;
                   }
 
                   throw new Error('[NLU] Requests limit per hour exceeded: ' + maximumRequestsPerHour + ' allowed ' + ('while getting ' + requestsCount + '. You can set higher value to NLU_MAX_REQUESTS_PER_HOUR.'));
 
-                case 17:
+                case 18:
                   eventIntent = {};
                   eventIntents = [];
-                  _context.prev = 19;
+                  _context.prev = 20;
 
                   if (config.debugModeEnabled) {
                     bp.logger.info('[NLU Extraction] ' + event.text, event.raw);
                   }
 
-                  _context.next = 23;
+                  _context.next = 24;
                   return (0, _bluebirdRetry2.default)(function () {
                     return provider.extract(event);
                   }, retryPolicy);
 
-                case 23:
+                case 24:
                   metadata = _context.sent;
 
 
@@ -16993,16 +16996,16 @@ module.exports = {
                     eventIntent = metadata.intent;
                     eventIntents = metadata.intents;
                   }
-                  _context.next = 30;
+                  _context.next = 31;
                   break;
 
-                case 27:
-                  _context.prev = 27;
-                  _context.t3 = _context['catch'](19);
+                case 28:
+                  _context.prev = 28;
+                  _context.t3 = _context['catch'](20);
 
                   bp.logger.warn('[NLU] Error extracting metadata for incoming text: ' + _context.t3.message);
 
-                case 30:
+                case 31:
                   intentConfidentEnough = function intentConfidentEnough() {
                     var confidence = eventIntent.confidence != null ? eventIntent.confidence : 1;
                     return confidence >= MIN_CONFIDENCE && confidence <= MAX_CONFIDENCE;
@@ -17030,12 +17033,12 @@ module.exports = {
                     });
                   }
 
-                case 32:
+                case 33:
                 case 'end':
                   return _context.stop();
               }
             }
-          }, _callee, this, [[19, 27]]);
+          }, _callee, this, [[20, 28]]);
         }));
 
         return function processEvent(_x3) {

@@ -10,13 +10,15 @@ export default class DialogflowProvider extends Provider {
     this.projectId = this.config.googleProjectId
 
     // TODO: get rid of eval once we drop webpack for node-part (needed to overcome webpack compilation)
-    const dialogflow = eval("require('dialogflow')") // eslint-disable-line no-eval
+    const dialogflow = require('dialogflow') // eslint-disable-line no-eval
 
     this.agentClient = new dialogflow.AgentsClient()
     this.sessionClient = new dialogflow.SessionsClient()
+    this.contextClient = new dialogflow.ContextsClient()
   }
 
   _getSessionId(event) {
+    console.log('Get session id?');
     let shortUserId = _.get(event, 'user.id') || ''
     if (shortUserId.length > 36) {
       shortUserId = crypto
@@ -60,34 +62,12 @@ export default class DialogflowProvider extends Provider {
 
   async extract(event) {
 
-    console.log('User ID: ', event.user.id)
-    const user_state = await event.bp.dialogEngine.stateManager.getState(event.user.id);
-    console.log('State ID: ', user_state);
-    const current_location = await event.bp.dialogEngine.getCurrentPosition(user_state._stateId);
-    console.log('Location: ', current_location);
-
-    const context = [
-      {
-        name: current_location.flow,
-        lifespan: 2,
-        parameters: {}
-      },
-      {
-        name: current_location.node,
-        lifespan: 2,
-        parameters: {}
-      }
-    ]
-
-    console.log('Context: ', context);
-
     const request = {
       session: this.sessionClient.sessionPath(this.projectId, this._getSessionId(event)),
       queryInput: {
         text: {
           //TODO Find a way to pass node and flow as context?
           text: event.text,
-          contextOut: context,
           languageCode: this.agent.defaultLanguageCode
         }
       }
@@ -101,8 +81,31 @@ export default class DialogflowProvider extends Provider {
     }
     const entities = _.map(queryResult.parameters.fields, (v, k) => ({ name: k, value: this._resolveEntity(v) }))
 
+    const context = {
+      add: (event, name, lifespan) => {
+        const sessionPath = this.contextClient.sessionPath(this.projectId, this._getSessionId(event));
+
+        const contextPath = this.contextClient.contextPath(
+          this.projectId,
+          this._getSessionId(event),
+          name
+        )
+
+            const createContextRequest = {
+              parent: sessionPath,
+              context: {
+                name: contextPath,
+                lifespanCount: lifespan
+              }
+            };
+
+            return this.contextClient.createContext(createContextRequest);
+      }
+    }
+
     return {
       intent,
+      context,
       intents: [intent],
       original: detection,
       entities: entities.map(entity => ({

@@ -16851,19 +16851,19 @@ var _dialogflow = __webpack_require__(139);
 
 var _dialogflow2 = _interopRequireDefault(_dialogflow);
 
-var _luis = __webpack_require__(140);
+var _luis = __webpack_require__(141);
 
 var _luis2 = _interopRequireDefault(_luis);
 
-var _rasa = __webpack_require__(141);
+var _rasa = __webpack_require__(142);
 
 var _rasa2 = _interopRequireDefault(_rasa);
 
-var _recast = __webpack_require__(143);
+var _recast = __webpack_require__(144);
 
 var _recast2 = _interopRequireDefault(_recast);
 
-var _native = __webpack_require__(144);
+var _native = __webpack_require__(145);
 
 var _native2 = _interopRequireDefault(_native);
 
@@ -18209,16 +18209,18 @@ var DialogflowProvider = function (_Provider) {
     _this.projectId = _this.config.googleProjectId;
 
     // TODO: get rid of eval once we drop webpack for node-part (needed to overcome webpack compilation)
-    var dialogflow = eval("require('dialogflow')"); // eslint-disable-line no-eval
+    var dialogflow = __webpack_require__(140); // eslint-disable-line no-eval
 
     _this.agentClient = new dialogflow.AgentsClient();
     _this.sessionClient = new dialogflow.SessionsClient();
+    _this.contextClient = new dialogflow.ContextsClient();
     return _this;
   }
 
   _createClass(DialogflowProvider, [{
     key: '_getSessionId',
     value: function _getSessionId(event) {
+      console.log('Get session id?');
       var shortUserId = _lodash2.default.get(event, 'user.id') || '';
       if (shortUserId.length > 36) {
         shortUserId = _crypto2.default.createHash('md5').update(shortUserId).digest('hex');
@@ -18339,56 +18341,25 @@ var DialogflowProvider = function (_Provider) {
       var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(event) {
         var _this3 = this;
 
-        var user_state, current_location, context, request, detection, queryResult, intent, entities;
+        var request, detection, queryResult, intent, entities, context;
         return regeneratorRuntime.wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
-
-                console.log('User ID: ', event.user.id);
-                _context4.next = 3;
-                return event.bp.dialogEngine.stateManager.getState(event.user.id);
-
-              case 3:
-                user_state = _context4.sent;
-
-                console.log('State ID: ', user_state);
-                _context4.next = 7;
-                return event.bp.dialogEngine.getCurrentPosition(user_state._stateId);
-
-              case 7:
-                current_location = _context4.sent;
-
-                console.log('Location: ', current_location);
-
-                context = [{
-                  name: current_location.flow,
-                  lifespan: 2,
-                  parameters: {}
-                }, {
-                  name: current_location.node,
-                  lifespan: 2,
-                  parameters: {}
-                }];
-
-
-                console.log('Context: ', context);
-
                 request = {
                   session: this.sessionClient.sessionPath(this.projectId, this._getSessionId(event)),
                   queryInput: {
                     text: {
                       //TODO Find a way to pass node and flow as context?
                       text: event.text,
-                      contextOut: context,
                       languageCode: this.agent.defaultLanguageCode
                     }
                   }
                 };
-                _context4.next = 14;
+                _context4.next = 3;
                 return this.sessionClient.detectIntent(request);
 
-              case 14:
+              case 3:
                 detection = _context4.sent;
                 queryResult = detection[0].queryResult;
                 intent = {
@@ -18399,8 +18370,26 @@ var DialogflowProvider = function (_Provider) {
                 entities = _lodash2.default.map(queryResult.parameters.fields, function (v, k) {
                   return { name: k, value: _this3._resolveEntity(v) };
                 });
+                context = {
+                  add: function add(event, name, lifespan) {
+                    var sessionPath = _this3.contextClient.sessionPath(_this3.projectId, _this3._getSessionId(event));
+
+                    var contextPath = _this3.contextClient.contextPath(_this3.projectId, _this3._getSessionId(event), name);
+
+                    var createContextRequest = {
+                      parent: sessionPath,
+                      context: {
+                        name: contextPath,
+                        lifespanCount: lifespan
+                      }
+                    };
+
+                    return _this3.contextClient.createContext(createContextRequest);
+                  }
+                };
                 return _context4.abrupt('return', {
                   intent: intent,
+                  context: context,
                   intents: [intent],
                   original: detection,
                   entities: entities.map(function (entity) {
@@ -18416,7 +18405,7 @@ var DialogflowProvider = function (_Provider) {
                   })
                 });
 
-              case 19:
+              case 9:
               case 'end':
                 return _context4.stop();
             }
@@ -18463,6 +18452,12 @@ exports.default = DialogflowProvider;
 
 /***/ }),
 /* 140 */
+/***/ (function(module, exports) {
+
+module.exports = require("dialogflow");
+
+/***/ }),
+/* 141 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19278,7 +19273,7 @@ var LuisProvider = function (_Provider) {
 exports.default = LuisProvider;
 
 /***/ }),
-/* 141 */
+/* 142 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19308,7 +19303,7 @@ var _bluebird = __webpack_require__(4);
 
 var _bluebird2 = _interopRequireDefault(_bluebird);
 
-var _ms = __webpack_require__(142);
+var _ms = __webpack_require__(143);
 
 var _ms2 = _interopRequireDefault(_ms);
 
@@ -19893,13 +19888,13 @@ var RasaProvider = function (_Provider) {
 exports.default = RasaProvider;
 
 /***/ }),
-/* 142 */
+/* 143 */
 /***/ (function(module, exports) {
 
 module.exports = require("ms");
 
 /***/ }),
-/* 143 */
+/* 144 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20876,7 +20871,7 @@ var RecastProvider = function (_Provider) {
 exports.default = RecastProvider;
 
 /***/ }),
-/* 144 */
+/* 145 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20898,11 +20893,11 @@ var _crypto = __webpack_require__(2);
 
 var _crypto2 = _interopRequireDefault(_crypto);
 
-var _zscore = __webpack_require__(145);
+var _zscore = __webpack_require__(146);
 
 var _zscore2 = _interopRequireDefault(_zscore);
 
-var _natural = __webpack_require__(146);
+var _natural = __webpack_require__(147);
 
 var _natural2 = _interopRequireDefault(_natural);
 
@@ -21329,13 +21324,13 @@ var NativeProvider = function (_Provider) {
 exports.default = NativeProvider;
 
 /***/ }),
-/* 145 */
+/* 146 */
 /***/ (function(module, exports) {
 
 module.exports = require("zscore");
 
 /***/ }),
-/* 146 */
+/* 147 */
 /***/ (function(module, exports) {
 
 module.exports = require("natural");

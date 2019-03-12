@@ -5,7 +5,11 @@ import Provider from './base'
 
 export default class DialogflowProvider extends Provider {
   constructor(config) {
-    super({ ...config, name: 'dialogflow', entityKey: '@dialogflow' })
+    super({
+      ...config,
+      name: 'dialogflow',
+      entityKey: '@dialogflow'
+    })
 
     this.projectId = this.config.googleProjectId
 
@@ -18,7 +22,6 @@ export default class DialogflowProvider extends Provider {
   }
 
   _getSessionId(event) {
-    console.log('Get session id?');
     let shortUserId = _.get(event, 'user.id') || ''
     if (shortUserId.length > 36) {
       shortUserId = crypto
@@ -48,7 +51,9 @@ export default class DialogflowProvider extends Provider {
   *******/
 
   async init() {
-    const [agent] = await this.agentClient.getAgent({ parent: this.agentClient.projectPath(this.projectId) })
+    const [agent] = await this.agentClient.getAgent({
+      parent: this.agentClient.projectPath(this.projectId)
+    })
     this.agent = agent
   }
 
@@ -73,33 +78,41 @@ export default class DialogflowProvider extends Provider {
       }
     }
     const detection = await this.sessionClient.detectIntent(request)
-    const { queryResult } = detection[0]
+    const {
+      queryResult
+    } = detection[0]
     const intent = {
       name: queryResult.intent.displayName,
       confidence: queryResult.intentDetectionConfidence,
       provider: 'dialogflow'
     }
-    const entities = _.map(queryResult.parameters.fields, (v, k) => ({ name: k, value: this._resolveEntity(v) }))
+    const entities = _.map(queryResult.parameters.fields, (v, k) => ({
+      name: k,
+      value: this._resolveEntity(v)
+    }))
 
     const context = {
       add: (event, name, lifespan) => {
+
+        console.log('Adding context: ', name);
+
         const sessionPath = this.contextClient.sessionPath(this.projectId, this._getSessionId(event));
 
         const contextPath = this.contextClient.contextPath(
           this.projectId,
           this._getSessionId(event),
           name
-        )
+        );
 
-            const createContextRequest = {
-              parent: sessionPath,
-              context: {
-                name: contextPath,
-                lifespanCount: lifespan
-              }
-            };
+        const createContextRequest = {
+          parent: sessionPath,
+          context: {
+            name: contextPath,
+            lifespanCount: lifespan
+          }
+        };
 
-            return this.contextClient.createContext(createContextRequest);
+        return this.contextClient.createContext(createContextRequest);
       }
     }
 

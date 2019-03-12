@@ -105,7 +105,7 @@ module.exports = {
 
     async function processEvent(event) {
 
-      console.log('Processing Event: ', event.text);
+      console.log('Processing Event: ', event.type);
 
       if (['session_reset', 'bp_dialog_timeout'].includes(event.type)) {
         return

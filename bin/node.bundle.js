@@ -16930,17 +16930,17 @@ module.exports = {
             while (1) {
               switch (_context.prev = _context.next) {
                 case 0:
-
-                  console.log('Processing Event: ', event.type);
-
-                  if (!['session_reset', 'bp_dialog_timeout', 'visit'].includes(event.type)) {
-                    _context.next = 3;
+                  if (!['session_reset', 'bp_dialog_timeout', 'visit', 'read', 'delivery'].includes(event.type)) {
+                    _context.next = 2;
                     break;
                   }
 
                   return _context.abrupt('return');
 
-                case 3:
+                case 2:
+
+                  console.log('Processing Event: ', event.type, event.text);
+
                   _context.t0 = JSON;
                   _context.next = 6;
                   return bp.kvs.get('nlu/requestsLimit');

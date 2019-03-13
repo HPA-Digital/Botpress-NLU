@@ -16933,7 +16933,7 @@ module.exports = {
 
                   console.log('Processing Event: ', event.type);
 
-                  if (!['session_reset', 'bp_dialog_timeout'].includes(event.type)) {
+                  if (!['session_reset', 'bp_dialog_timeout', 'visit'].includes(event.type)) {
                     _context.next = 3;
                     break;
                   }

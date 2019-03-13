@@ -16931,7 +16931,7 @@ module.exports = {
               switch (_context.prev = _context.next) {
                 case 0:
 
-                  console.log('Processing Event: ', event.text);
+                  console.log('Processing Event: ', event.type);
 
                   if (!['session_reset', 'bp_dialog_timeout'].includes(event.type)) {
                     _context.next = 3;
@@ -18204,7 +18204,10 @@ var DialogflowProvider = function (_Provider) {
   function DialogflowProvider(config) {
     _classCallCheck(this, DialogflowProvider);
 
-    var _this = _possibleConstructorReturn(this, (DialogflowProvider.__proto__ || Object.getPrototypeOf(DialogflowProvider)).call(this, _extends({}, config, { name: 'dialogflow', entityKey: '@dialogflow' })));
+    var _this = _possibleConstructorReturn(this, (DialogflowProvider.__proto__ || Object.getPrototypeOf(DialogflowProvider)).call(this, _extends({}, config, {
+      name: 'dialogflow',
+      entityKey: '@dialogflow'
+    })));
 
     _this.projectId = _this.config.googleProjectId;
 
@@ -18220,7 +18223,6 @@ var DialogflowProvider = function (_Provider) {
   _createClass(DialogflowProvider, [{
     key: '_getSessionId',
     value: function _getSessionId(event) {
-      console.log('Get session id?');
       var shortUserId = _lodash2.default.get(event, 'user.id') || '';
       if (shortUserId.length > 36) {
         shortUserId = _crypto2.default.createHash('md5').update(shortUserId).digest('hex');
@@ -18264,7 +18266,9 @@ var DialogflowProvider = function (_Provider) {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return this.agentClient.getAgent({ parent: this.agentClient.projectPath(this.projectId) });
+                return this.agentClient.getAgent({
+                  parent: this.agentClient.projectPath(this.projectId)
+                });
 
               case 2:
                 _ref2 = _context.sent;
@@ -18368,10 +18372,16 @@ var DialogflowProvider = function (_Provider) {
                   provider: 'dialogflow'
                 };
                 entities = _lodash2.default.map(queryResult.parameters.fields, function (v, k) {
-                  return { name: k, value: _this3._resolveEntity(v) };
+                  return {
+                    name: k,
+                    value: _this3._resolveEntity(v)
+                  };
                 });
                 context = {
                   add: function add(event, name, lifespan) {
+
+                    console.log('Adding context: ', name);
+
                     var sessionPath = _this3.contextClient.sessionPath(_this3.projectId, _this3._getSessionId(event));
 
                     var contextPath = _this3.contextClient.contextPath(_this3.projectId, _this3._getSessionId(event), name);

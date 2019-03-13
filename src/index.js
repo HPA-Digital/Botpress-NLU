@@ -105,11 +105,11 @@ module.exports = {
 
     async function processEvent(event) {
 
-      console.log('Processing Event: ', event.type);
-
-      if (['session_reset', 'bp_dialog_timeout', 'visit'].includes(event.type)) {
+      if (['session_reset', 'bp_dialog_timeout', 'visit', 'read', 'delivery'].includes(event.type)) {
         return
       }
+
+      console.log('Processing Event: ', event.type, event.text);
 
       const previous = JSON.parse((await bp.kvs.get('nlu/requestsLimit')) || '{}')
       const hour = moment().startOf('hour')

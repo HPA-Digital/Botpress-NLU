@@ -2,7 +2,7 @@
 
 ### Changes - Dialogflow:
 - Exposed function allowing creation of contexts through bp.nlu
-- Dialogflow no-longer processes read, delivery or visit event types
+- Dialogflow no-longer processes read, delivery or visit event types (This stops these events consuming context lifespans and makes Dialogflow history cleaner)
 
 ---
 <img src='https://raw.githubusercontent.com/botpress/botpress/master/packages/functionals/botpress-nlu/assets/banner_demo.gif'>

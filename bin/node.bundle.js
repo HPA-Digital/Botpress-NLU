@@ -18345,7 +18345,7 @@ var DialogflowProvider = function (_Provider) {
       var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(event) {
         var _this3 = this;
 
-        var request, detection, queryResult, intent, entities, context;
+        var request, detection, queryResult, isSmallTalk, intent, entities, context;
         return regeneratorRuntime.wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
@@ -18366,8 +18366,10 @@ var DialogflowProvider = function (_Provider) {
               case 3:
                 detection = _context4.sent;
                 queryResult = detection[0].queryResult;
+                isSmallTalk = queryResult.action.startsWith('smalltalk');
                 intent = {
-                  name: queryResult.intent.displayName,
+                  name: isSmallTalk ? queryResult.action : queryResult.intent.displayName,
+                  isSmallTalk: isSmallTalk,
                   confidence: queryResult.intentDetectionConfidence,
                   provider: 'dialogflow'
                 };
@@ -18379,8 +18381,6 @@ var DialogflowProvider = function (_Provider) {
                 });
                 context = {
                   add: function add(event, name, lifespan) {
-
-                    console.log('Adding context: ', name);
 
                     var sessionPath = _this3.contextClient.sessionPath(_this3.projectId, _this3._getSessionId(event));
 
@@ -18415,7 +18415,7 @@ var DialogflowProvider = function (_Provider) {
                   })
                 });
 
-              case 9:
+              case 10:
               case 'end':
                 return _context4.stop();
             }

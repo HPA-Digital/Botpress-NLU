@@ -81,8 +81,12 @@ export default class DialogflowProvider extends Provider {
     const {
       queryResult
     } = detection[0]
+
+    const isSmallTalk = queryResult.action.startsWith('smalltalk')
+
     const intent = {
-      name: queryResult.intent.displayName,
+      name: isSmallTalk ? queryResult.action : queryResult.intent.displayName,
+      isSmallTalk,
       confidence: queryResult.intentDetectionConfidence,
       provider: 'dialogflow'
     }
@@ -93,8 +97,6 @@ export default class DialogflowProvider extends Provider {
 
     const context = {
       add: (event, name, lifespan) => {
-
-        console.log('Adding context: ', name);
 
         const sessionPath = this.contextClient.sessionPath(this.projectId, this._getSessionId(event));
 

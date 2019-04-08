@@ -16938,56 +16938,53 @@ module.exports = {
                   return _context.abrupt('return');
 
                 case 2:
-
-                  console.log('Processing Event: ', event.type, event.text);
-
                   _context.t0 = JSON;
-                  _context.next = 6;
+                  _context.next = 5;
                   return bp.kvs.get('nlu/requestsLimit');
 
-                case 6:
+                case 5:
                   _context.t1 = _context.sent;
 
                   if (_context.t1) {
-                    _context.next = 9;
+                    _context.next = 8;
                     break;
                   }
 
                   _context.t1 = '{}';
 
-                case 9:
+                case 8:
                   _context.t2 = _context.t1;
                   previous = _context.t0.parse.call(_context.t0, _context.t2);
                   hour = (0, _moment2.default)().startOf('hour');
                   requestsCount = hour.isSame(previous.hour) ? previous.requestsCount : 0;
-                  _context.next = 15;
+                  _context.next = 14;
                   return bp.kvs.set('nlu/requestsLimit', JSON.stringify({ hour: hour, requestsCount: requestsCount + 1 }));
 
-                case 15:
+                case 14:
                   maximumRequestsPerHour = parseFloat(config.maximumRequestsPerHour);
 
                   if (!(requestsCount > maximumRequestsPerHour)) {
-                    _context.next = 18;
+                    _context.next = 17;
                     break;
                   }
 
                   throw new Error('[NLU] Requests limit per hour exceeded: ' + maximumRequestsPerHour + ' allowed ' + ('while getting ' + requestsCount + '. You can set higher value to NLU_MAX_REQUESTS_PER_HOUR.'));
 
-                case 18:
+                case 17:
                   eventIntent = {};
                   eventIntents = [];
-                  _context.prev = 20;
+                  _context.prev = 19;
 
                   if (config.debugModeEnabled) {
                     bp.logger.info('[NLU Extraction] ' + event.text, event.raw);
                   }
 
-                  _context.next = 24;
+                  _context.next = 23;
                   return (0, _bluebirdRetry2.default)(function () {
                     return provider.extract(event);
                   }, retryPolicy);
 
-                case 24:
+                case 23:
                   metadata = _context.sent;
 
 
@@ -16996,16 +16993,16 @@ module.exports = {
                     eventIntent = metadata.intent;
                     eventIntents = metadata.intents;
                   }
-                  _context.next = 31;
+                  _context.next = 30;
                   break;
 
-                case 28:
-                  _context.prev = 28;
-                  _context.t3 = _context['catch'](20);
+                case 27:
+                  _context.prev = 27;
+                  _context.t3 = _context['catch'](19);
 
                   bp.logger.warn('[NLU] Error extracting metadata for incoming text: ' + _context.t3.message);
 
-                case 31:
+                case 30:
                   intentConfidentEnough = function intentConfidentEnough() {
                     var confidence = eventIntent.confidence != null ? eventIntent.confidence : 1;
                     return confidence >= MIN_CONFIDENCE && confidence <= MAX_CONFIDENCE;
@@ -17033,12 +17030,12 @@ module.exports = {
                     });
                   }
 
-                case 33:
+                case 32:
                 case 'end':
                   return _context.stop();
               }
             }
-          }, _callee, this, [[20, 28]]);
+          }, _callee, this, [[19, 27]]);
         }));
 
         return function processEvent(_x3) {
@@ -18368,7 +18365,7 @@ var DialogflowProvider = function (_Provider) {
                 queryResult = detection[0].queryResult;
                 isSmallTalk = queryResult.action.startsWith('smalltalk');
                 intent = {
-                  name: isSmallTalk ? queryResult.action : queryResult.intent.displayName,
+                  name: isSmallTalk ? queryResult.action : queryResult.intent && queryResult.intent.displayName,
                   isSmallTalk: isSmallTalk,
                   confidence: queryResult.intentDetectionConfidence,
                   provider: 'dialogflow'

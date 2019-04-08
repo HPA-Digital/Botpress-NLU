@@ -85,7 +85,7 @@ export default class DialogflowProvider extends Provider {
     const isSmallTalk = queryResult.action.startsWith('smalltalk')
 
     const intent = {
-      name: isSmallTalk ? queryResult.action : queryResult.intent.displayName,
+      name: isSmallTalk ? queryResult.action : queryResult.intent && queryResult.intent.displayName,
       isSmallTalk,
       confidence: queryResult.intentDetectionConfidence,
       provider: 'dialogflow'

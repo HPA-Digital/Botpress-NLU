@@ -75,7 +75,12 @@ export default class DialogflowProvider extends Provider {
           text: event.text,
           languageCode: this.agent.defaultLanguageCode
         }
-      }
+	  },
+	  queryParams: {
+		sentimentAnalysisRequestConfig: {
+		  analyzeQueryTextSentiment: true,
+		},
+	  }
     }
     const detection = await this.sessionClient.detectIntent(request)
     const {

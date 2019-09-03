@@ -477,35 +477,35 @@ var _bluebirdRetry = __webpack_require__(8);
 
 var _bluebirdRetry2 = _interopRequireDefault(_bluebirdRetry);
 
-var _moment = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"moment\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+var _moment = __webpack_require__(9);
 
 var _moment2 = _interopRequireDefault(_moment);
 
-var _storage = __webpack_require__(9);
+var _storage = __webpack_require__(10);
 
 var _storage2 = _interopRequireDefault(_storage);
 
-var _parser = __webpack_require__(12);
+var _parser = __webpack_require__(13);
 
 var _parser2 = _interopRequireDefault(_parser);
 
-var _dialogflow = __webpack_require__(13);
+var _dialogflow = __webpack_require__(14);
 
 var _dialogflow2 = _interopRequireDefault(_dialogflow);
 
-var _luis = __webpack_require__(15);
+var _luis = __webpack_require__(16);
 
 var _luis2 = _interopRequireDefault(_luis);
 
-var _rasa = __webpack_require__(16);
+var _rasa = __webpack_require__(17);
 
 var _rasa2 = _interopRequireDefault(_rasa);
 
-var _recast = __webpack_require__(18);
+var _recast = __webpack_require__(19);
 
 var _recast2 = _interopRequireDefault(_recast);
 
-var _native = __webpack_require__(19);
+var _native = __webpack_require__(20);
 
 var _native2 = _interopRequireDefault(_native);
 
@@ -1045,6 +1045,12 @@ module.exports = require("bluebird-retry");
 
 /***/ }),
 /* 9 */
+/***/ (function(module, exports) {
+
+module.exports = require("moment");
+
+/***/ }),
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1058,11 +1064,11 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _mkdirp = __webpack_require__(10);
+var _mkdirp = __webpack_require__(11);
 
 var _mkdirp2 = _interopRequireDefault(_mkdirp);
 
-var _path = __webpack_require__(11);
+var _path = __webpack_require__(12);
 
 var _path2 = _interopRequireDefault(_path);
 
@@ -1426,19 +1432,19 @@ var Storage = function () {
 exports.default = Storage;
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports) {
 
 module.exports = require("mkdirp");
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports) {
 
 module.exports = require("path");
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1503,7 +1509,7 @@ var Parser = function () {
 exports.default = Parser;
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1555,7 +1561,7 @@ var DialogflowProvider = function (_Provider) {
     _this.projectId = _this.config.googleProjectId;
 
     // TODO: get rid of eval once we drop webpack for node-part (needed to overcome webpack compilation)
-    var dialogflow = __webpack_require__(14); // eslint-disable-line no-eval
+    var dialogflow = __webpack_require__(15); // eslint-disable-line no-eval
 
     _this.agentClient = new dialogflow.AgentsClient();
     _this.sessionClient = new dialogflow.SessionsClient();
@@ -1809,13 +1815,13 @@ var DialogflowProvider = function (_Provider) {
 exports.default = DialogflowProvider;
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports) {
 
 module.exports = require("dialogflow");
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2631,7 +2637,7 @@ var LuisProvider = function (_Provider) {
 exports.default = LuisProvider;
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2661,7 +2667,7 @@ var _bluebird = __webpack_require__(3);
 
 var _bluebird2 = _interopRequireDefault(_bluebird);
 
-var _ms = __webpack_require__(17);
+var _ms = __webpack_require__(18);
 
 var _ms2 = _interopRequireDefault(_ms);
 
@@ -3246,13 +3252,13 @@ var RasaProvider = function (_Provider) {
 exports.default = RasaProvider;
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports) {
 
 module.exports = require("ms");
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4229,7 +4235,7 @@ var RecastProvider = function (_Provider) {
 exports.default = RecastProvider;
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4251,11 +4257,11 @@ var _crypto = __webpack_require__(1);
 
 var _crypto2 = _interopRequireDefault(_crypto);
 
-var _zscore = __webpack_require__(20);
+var _zscore = __webpack_require__(21);
 
 var _zscore2 = _interopRequireDefault(_zscore);
 
-var _natural = __webpack_require__(21);
+var _natural = __webpack_require__(22);
 
 var _natural2 = _interopRequireDefault(_natural);
 
@@ -4682,13 +4688,13 @@ var NativeProvider = function (_Provider) {
 exports.default = NativeProvider;
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports) {
 
 module.exports = require("zscore");
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports) {
 
 module.exports = require("natural");

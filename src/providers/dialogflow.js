@@ -14,7 +14,7 @@ export default class DialogflowProvider extends Provider {
     this.projectId = this.config.googleProjectId
 
     // TODO: get rid of eval once we drop webpack for node-part (needed to overcome webpack compilation)
-    const dialogflow = require('dialogflow') // eslint-disable-line no-eval
+    const dialogflow = require('dialogflow').v2 // eslint-disable-line no-eval
 
     this.agentClient = new dialogflow.AgentsClient()
     this.sessionClient = new dialogflow.SessionsClient()
@@ -80,9 +80,10 @@ export default class DialogflowProvider extends Provider {
 		sentimentAnalysisRequestConfig: {
 		  analyzeQueryTextSentiment: true,
 		},
-	  }
+	  },
     }
-    const detection = await this.sessionClient.detectIntent(request)
+	const detection = await this.sessionClient.detectIntent(request)
+
     const {
       queryResult
     } = detection[0]
@@ -121,7 +122,9 @@ export default class DialogflowProvider extends Provider {
 
         return this.contextClient.createContext(createContextRequest);
       }
-    }
+	}
+
+	event.bp.logger.debug(`Dialogflow: [NLU] "${event.text}"\t\t?> ITNT\t"${intent.name}" (${intent.confidence.toFixed(2)})`)
 
     return {
       intent,

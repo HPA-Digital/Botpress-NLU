@@ -1561,7 +1561,7 @@ var DialogflowProvider = function (_Provider) {
     _this.projectId = _this.config.googleProjectId;
 
     // TODO: get rid of eval once we drop webpack for node-part (needed to overcome webpack compilation)
-    var dialogflow = __webpack_require__(15); // eslint-disable-line no-eval
+    var dialogflow = __webpack_require__(15).v2; // eslint-disable-line no-eval
 
     _this.agentClient = new dialogflow.AgentsClient();
     _this.sessionClient = new dialogflow.SessionsClient();
@@ -1751,6 +1751,10 @@ var DialogflowProvider = function (_Provider) {
                     return _this3.contextClient.createContext(createContextRequest);
                   }
                 };
+
+
+                event.bp.logger.debug('Dialogflow: [NLU] "' + event.text + '"\t\t?> ITNT\t"' + intent.name + '" (' + intent.confidence.toFixed(2) + ')');
+
                 return _context4.abrupt('return', {
                   intent: intent,
                   context: context,
@@ -1769,7 +1773,7 @@ var DialogflowProvider = function (_Provider) {
                   })
                 });
 
-              case 10:
+              case 11:
               case 'end':
                 return _context4.stop();
             }
